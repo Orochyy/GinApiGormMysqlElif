@@ -1,13 +1,13 @@
 package main
 
 import (
+	"GinApiGormMysqlElif/config"
+	"GinApiGormMysqlElif/controller"
+	"GinApiGormMysqlElif/middleware"
+	"GinApiGormMysqlElif/repository"
+	"GinApiGormMysqlElif/service"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/ydhnwb/golang_api/config"
-	"github.com/ydhnwb/golang_api/controller"
-	"github.com/ydhnwb/golang_api/middleware"
-	"github.com/ydhnwb/golang_api/repository"
-	"github.com/ydhnwb/golang_api/service"
 	"gorm.io/gorm"
 	"time"
 )
