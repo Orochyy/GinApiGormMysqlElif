@@ -3,6 +3,7 @@ package main
 import (
 	"GinApiGormMysqlElif/config"
 	"GinApiGormMysqlElif/controller"
+	"GinApiGormMysqlElif/entity"
 	"GinApiGormMysqlElif/middleware"
 	"GinApiGormMysqlElif/repository"
 	"GinApiGormMysqlElif/service"
@@ -58,5 +59,7 @@ func main() {
 		bookRoutes.DELETE("/:id", bookController.Delete)
 	}
 
-	r.Run()
+	db.AutoMigrate(&entity.User{})
+
+	r.Run(":8080")
 }
