@@ -3,8 +3,8 @@ package main
 import (
 	"GinApiGormMysqlElif/config"
 	"GinApiGormMysqlElif/controller"
-	"GinApiGormMysqlElif/entity"
 	"GinApiGormMysqlElif/middleware"
+	"GinApiGormMysqlElif/migrations"
 	"GinApiGormMysqlElif/repository"
 	"GinApiGormMysqlElif/service"
 	"github.com/gin-contrib/cors"
@@ -24,6 +24,7 @@ var (
 	authController controller.AuthController = controller.NewAuthController(authService, jwtService)
 	userController controller.UserController = controller.NewUserController(userService, jwtService)
 	bookController controller.BookController = controller.NewBookController(bookService, jwtService)
+	Migrations                               = migrations.DbMigrate
 )
 
 func main() {
@@ -59,7 +60,7 @@ func main() {
 		bookRoutes.DELETE("/:id", bookController.Delete)
 	}
 
-	db.AutoMigrate(&entity.User{})
+	go Migrations()
 
 	r.Run(":8080")
 }
