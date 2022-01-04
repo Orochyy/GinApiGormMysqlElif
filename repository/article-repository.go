@@ -17,6 +17,7 @@ type articleConnection struct {
 	connection *gorm.DB
 }
 
+//not work
 func NewArticleRepository(dbConn *gorm.DB) ArticleRepository {
 	return &articleConnection{
 		connection: dbConn,
@@ -35,9 +36,8 @@ func (db *articleConnection) UpdateArticle(a entity.Articles) entity.Articles {
 	return a
 }
 
-func (db *articleConnection) DeleteArticle(a entity.Articles) *gorm.DB {
-	//db.connection.Delete(&a)
-	return db.connection.Delete(&a)
+func (db *articleConnection) DeleteArticle(a entity.Articles) {
+	db.connection.Delete(&a)
 }
 
 func (db *articleConnection) FindArticleByID(articlesID uint64) entity.Articles {

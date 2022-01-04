@@ -26,6 +26,7 @@ var (
 	authController    controller.AuthController    = controller.NewAuthController(authService, jwtService)
 	userController    controller.UserController    = controller.NewUserController(userService, jwtService)
 	bookController    controller.BookController    = controller.NewBookController(bookService, jwtService)
+	articleController controller.ArticleController = controller.NewArticleController(articleService, jwtService)
 	Migrations                                     = migrations.DbMigrate
 )
 
@@ -60,6 +61,14 @@ func main() {
 		bookRoutes.GET("/:id", bookController.FindByID)
 		bookRoutes.PUT("/:id", bookController.Update)
 		bookRoutes.DELETE("/:id", bookController.Delete)
+	}
+	articleRoutes := r.Group("api/articles", middleware.AuthorizeJWT(jwtService))
+	{
+		articleRoutes.GET("/", articleController.All)
+		articleRoutes.POST("/", articleController.Insert)
+		articleRoutes.GET("/:id", articleController.FindByID)
+		articleRoutes.PUT("/:id", articleController.Update)
+		articleRoutes.DELETE("/:id", articleController.Delete)
 	}
 
 	go Migrations()
