@@ -38,11 +38,11 @@ func (service *articleService) Insert(a dto.ArticleCreateDTO) entity.Articles {
 	return res
 }
 
-func (service *articleService) Update(a dto.ArticleCreateDTO) entity.Articles {
+func (service *articleService) Update(a dto.ArticleUpdateDTO) entity.Articles {
 	article := entity.Articles{}
 	err := smapping.FillStruct(&article, smapping.MapFields(&a))
 	if err != nil {
-		log.Fatalf("Failed map %v:", err)
+		log.Fatalf("Failed map %v: ", err)
 	}
 	res := service.articleRepository.UpdateArticle(article)
 	return res
@@ -60,7 +60,7 @@ func (service *articleService) FindByID(articleID uint64) entity.Articles {
 	return service.articleRepository.FindArticleByID(articleID)
 }
 
-func (service *articleService) IsAllowedToEdt(userID string, articleID uint64) bool {
+func (service *articleService) IsAllowedToEdit(userID string, articleID uint64) bool {
 	a := service.articleRepository.FindArticleByID(articleID)
 	id := fmt.Sprintf("%v", a.UserID)
 	return userID == id
