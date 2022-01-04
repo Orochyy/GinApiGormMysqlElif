@@ -14,17 +14,18 @@ import (
 )
 
 var (
-	db             *gorm.DB                  = config.SetupDatabaseConnection()
-	userRepository repository.UserRepository = repository.NewUserRepository(db)
-	bookRepository repository.BookRepository = repository.NewBookRepository(db)
-	jwtService     service.JWTService        = service.NewJWTService()
-	userService    service.UserService       = service.NewUserService(userRepository)
-	bookService    service.BookService       = service.NewBookService(bookRepository)
-	authService    service.AuthService       = service.NewAuthService(userRepository)
-	authController controller.AuthController = controller.NewAuthController(authService, jwtService)
-	userController controller.UserController = controller.NewUserController(userService, jwtService)
-	bookController controller.BookController = controller.NewBookController(bookService, jwtService)
-	Migrations                               = migrations.DbMigrate
+	db                *gorm.DB                     = config.SetupDatabaseConnection()
+	userRepository    repository.UserRepository    = repository.NewUserRepository(db)
+	bookRepository    repository.BookRepository    = repository.NewBookRepository(db)
+	articleRepository repository.ArticleRepository = repository.NewArticleRepository(db)
+	jwtService        service.JWTService           = service.NewJWTService()
+	userService       service.UserService          = service.NewUserService(userRepository)
+	bookService       service.BookService          = service.NewBookService(bookRepository)
+	authService       service.AuthService          = service.NewAuthService(userRepository)
+	authController    controller.AuthController    = controller.NewAuthController(authService, jwtService)
+	userController    controller.UserController    = controller.NewUserController(userService, jwtService)
+	bookController    controller.BookController    = controller.NewBookController(bookService, jwtService)
+	Migrations                                     = migrations.DbMigrate
 )
 
 func main() {
