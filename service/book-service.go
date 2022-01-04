@@ -9,7 +9,6 @@ import (
 	"log"
 )
 
-//BookService is a ....
 type BookService interface {
 	Insert(b dto.BookCreateDTO) entity.Book
 	Update(b dto.BookUpdateDTO) entity.Book
@@ -23,7 +22,6 @@ type bookService struct {
 	bookRepository repository.BookRepository
 }
 
-//NewBookService .....
 func NewBookService(bookRepo repository.BookRepository) BookService {
 	return &bookService{
 		bookRepository: bookRepo,

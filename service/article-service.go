@@ -22,7 +22,7 @@ type articleService struct {
 	articleRepository repository.ArticleRepository
 }
 
-func NewArticleService(articleRepo repository.ArticleRepository) *articleService {
+func NewArticleService(articleRepo repository.ArticleRepository) ArticleService {
 	return &articleService{
 		articleRepository: articleRepo,
 	}

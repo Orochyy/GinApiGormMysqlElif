@@ -21,6 +21,7 @@ var (
 	jwtService        service.JWTService           = service.NewJWTService()
 	userService       service.UserService          = service.NewUserService(userRepository)
 	bookService       service.BookService          = service.NewBookService(bookRepository)
+	articleService    service.ArticleService       = service.NewArticleService(articleRepository)
 	authService       service.AuthService          = service.NewAuthService(userRepository)
 	authController    controller.AuthController    = controller.NewAuthController(authService, jwtService)
 	userController    controller.UserController    = controller.NewUserController(userService, jwtService)
