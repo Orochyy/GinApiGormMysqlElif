@@ -68,3 +68,5 @@ func (c *userController) Profile(context *gin.Context) {
 	context.JSON(http.StatusOK, res)
 
 }
+
+// we have add to profile articles and bnaks!
