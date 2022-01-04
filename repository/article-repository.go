@@ -8,7 +8,7 @@ import (
 type ArticleRepository interface {
 	InsertArticle(a entity.Articles) entity.Articles
 	UpdateArticle(a entity.Articles) entity.Articles
-	DeleteArticle(a entity.Articles) *gorm.DB
+	DeleteArticle(a entity.Articles)
 	AllArticle() []entity.Articles
 	FindArticleByID(articlesID uint64) entity.Articles
 }
