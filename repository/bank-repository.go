@@ -6,6 +6,11 @@ import (
 )
 
 type BankRepository interface {
+	InsertBank(b entity.Bank) entity.Bank
+	UpdateBank(b entity.Bank) entity.Bank
+	DeleteBank(b entity.Bank)
+	AllBank() []entity.Bank
+	FindBankByID(bankID uint64) entity.Bank
 }
 
 type bankConnection struct {
