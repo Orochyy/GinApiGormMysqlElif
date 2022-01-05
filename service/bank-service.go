@@ -10,6 +10,12 @@ import (
 )
 
 type BankService interface {
+	Insert(b dto.BankCreateDTO) entity.Bank
+	Update(b dto.BankUpdateDTO) entity.Bank
+	Delete(b entity.Bank)
+	All() []entity.Bank
+	FindByID(bankID uint64) entity.Bank
+	IsAllowedToEdit(userID string, bankID uint64) bool
 }
 
 type bankService struct {
