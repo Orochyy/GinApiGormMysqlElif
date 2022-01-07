@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"GinApiGormMysqlElif/dto"
 	"GinApiGormMysqlElif/entity"
 	"GinApiGormMysqlElif/helper"
 	"GinApiGormMysqlElif/service"
@@ -45,5 +46,24 @@ func (c *bankController) FindByID(context *gin.Context) {
 	} else {
 		res := helper.BuildResponse(true, "OK", bank)
 		context.JSON(http.StatusOK, res)
+	}
+}
+
+func (c *bankController) Insert(context *gin.Context) {
+	var bankCreateDTO dto.BankCreateDTO
+	errDTO := context.ShouldBind(&bankCreateDTO)
+	if errDTO != nil {
+		res := helper.BuildErrorResponse("Failed to process request", errDTO.Error(), helper.EmptyObj{})
+		context.JSON(http.StatusBadRequest, res)
+	} else {
+		authHeader := context.GetHeader("Authorization")
+		userID := c.getUserIDByToken(authHeader)
+		convertedUserID, err := strconv.ParseUint(userID, 10, 64)
+		if err == nil {
+			bankCreateDTO.UserID = convertedUserID
+		}
+		result := c.bankService.Insert(bankCreateDTO)
+		response := helper.BuildResponse(true, "OK", result)
+		context.JSON(http.StatusCreated, response)
 	}
 }
