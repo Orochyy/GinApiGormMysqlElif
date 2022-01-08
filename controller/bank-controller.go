@@ -5,6 +5,8 @@ import (
 	"GinApiGormMysqlElif/entity"
 	"GinApiGormMysqlElif/helper"
 	"GinApiGormMysqlElif/service"
+	"fmt"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -65,5 +67,35 @@ func (c *bankController) Insert(context *gin.Context) {
 		result := c.bankService.Insert(bankCreateDTO)
 		response := helper.BuildResponse(true, "OK", result)
 		context.JSON(http.StatusCreated, response)
+	}
+}
+
+func (c *bankController) Update(context *gin.Context) {
+	var bankUpdateDTO dto.BankUpdateDTO
+	errDTO := context.ShouldBind(&bankUpdateDTO)
+	if errDTO != nil {
+		res := helper.BuildErrorResponse("Failed to process request", errDTO.Error(), helper.EmptyObj{})
+		context.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	authHeader := context.GetHeader("Authorization")
+	token, errToken := c.jwtService.ValidateToken(authHeader)
+	if errToken != nil {
+		panic(errToken.Error())
+	}
+	claims := token.Claims.(jwt.MapClaims)
+	userID := fmt.Sprintf("%v", claims["user_id"])
+	if c.bankService.IsAllowedToEdit(userID, bankUpdateDTO.ID) {
+		id, errID := strconv.ParseUint(userID, 10, 64)
+		if errID == nil {
+			bankUpdateDTO.UserID = id
+		}
+		result := c.bankService.Update(bankUpdateDTO)
+		response := helper.BuildResponse(true, "OK", result)
+		context.JSON(http.StatusOK, response)
+	} else {
+		response := helper.BuildErrorResponse("You dont have permission", "You are not the owner", helper.EmptyObj{})
+		context.JSON(http.StatusForbidden, response)
 	}
 }
