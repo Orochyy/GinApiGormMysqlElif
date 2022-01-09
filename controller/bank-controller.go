@@ -99,3 +99,28 @@ func (c *bankController) Update(context *gin.Context) {
 		context.JSON(http.StatusForbidden, response)
 	}
 }
+
+func (c *bankController) Delete(context *gin.Context) {
+	var bank entity.Bank
+	id, err := strconv.ParseUint(context.Param("id"), 0, 0)
+	if err != nil {
+		response := helper.BuildErrorResponse("Failed tou get id", "No param id were found", helper.EmptyObj{})
+		context.JSON(http.StatusBadRequest, response)
+	}
+	bank.ID = id
+	authHeader := context.GetHeader("Authorization")
+	token, errToken := c.jwtService.ValidateToken(authHeader)
+	if errToken != nil {
+		panic(errToken.Error())
+	}
+	claims := token.Claims.(jwt.MapClaims)
+	userID := fmt.Sprintf("%v", claims["user_id"])
+	if c.bankService.IsAllowedToEdit(userID, bank.ID) {
+		c.bankService.Delete(bank)
+		res := helper.BuildResponse(true, "Deleted", helper.EmptyObj{})
+		context.JSON(http.StatusOK, res)
+	} else {
+		response := helper.BuildErrorResponse("You dont have permission", "You are not the owner", helper.EmptyObj{})
+		context.JSON(http.StatusForbidden, response)
+	}
+}
