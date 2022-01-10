@@ -124,3 +124,13 @@ func (c *bankController) Delete(context *gin.Context) {
 		context.JSON(http.StatusForbidden, response)
 	}
 }
+
+func (c *bankController) getUserIDByToken(token string) string {
+	aToken, err := c.jwtService.ValidateToken(token)
+	if err != nil {
+		panic(err.Error())
+	}
+	claims := aToken.Claims.(jwt.MapClaims)
+	id := fmt.Sprintf("%v", claims["user_id"])
+	return id
+}
