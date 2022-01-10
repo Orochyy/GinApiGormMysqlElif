@@ -6,7 +6,7 @@ type BankUpdateDTO struct {
 	Loan    string `json:"loan" form:"loan" binding:"required"`
 	Percent string `json:"percent" form:"percent" binding:"required"`
 	Term    string `json:"term" form:"term" binding:"required"`
-	//UserID      uint64 `json:"user_id,omitempty"  form:"user_id,omitempty"`
+	UserID  uint64 `json:"user_id,omitempty"  form:"user_id,omitempty"`
 }
 
 type BankCreateDTO struct {
@@ -14,5 +14,5 @@ type BankCreateDTO struct {
 	Loan    string `json:"loan" form:"loan" binding:"required"`
 	Percent string `json:"percent" form:"percent" binding:"required"`
 	Term    string `json:"term" form:"term" binding:"required"`
-	//UserID      uint64 `json:"user_id,omitempty"  form:"user_id,omitempty"`
+	UserID  uint64 `json:"user_id,omitempty"  form:"user_id,omitempty"`
 }
