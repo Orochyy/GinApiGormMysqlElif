@@ -76,6 +76,10 @@ func main() {
 	bankRoutes := r.Group("api/bank", middleware.AuthorizeJWT(jwtService))
 	{
 		bankRoutes.GET("/", bankController.All)
+		bankRoutes.POST("/", bankController.Insert)
+		bankRoutes.GET("/:id", bankController.FindByID)
+		bankRoutes.PUT("/:id", bankController.Update)
+		bankRoutes.DELETE("/:id", bankController.Delete)
 	}
 	go Migrations()
 
