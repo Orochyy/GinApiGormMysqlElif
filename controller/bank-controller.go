@@ -13,6 +13,11 @@ import (
 )
 
 type BankController interface {
+	All(context *gin.Context)
+	FindByID(context *gin.Context)
+	Insert(context *gin.Context)
+	Update(context *gin.Context)
+	Delete(context *gin.Context)
 }
 
 type bankController struct {

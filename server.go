@@ -17,15 +17,18 @@ var (
 	db                *gorm.DB                     = config.SetupDatabaseConnection()
 	userRepository    repository.UserRepository    = repository.NewUserRepository(db)
 	bookRepository    repository.BookRepository    = repository.NewBookRepository(db)
+	bankRepository    repository.BankRepository    = repository.NewBankRepository(db)
 	articleRepository repository.ArticleRepository = repository.NewArticleRepository(db)
 	jwtService        service.JWTService           = service.NewJWTService()
 	userService       service.UserService          = service.NewUserService(userRepository)
 	bookService       service.BookService          = service.NewBookService(bookRepository)
+	bankService       service.BankService          = service.NewBankService(bankRepository)
 	articleService    service.ArticleService       = service.NewArticleService(articleRepository)
 	authService       service.AuthService          = service.NewAuthService(userRepository)
 	authController    controller.AuthController    = controller.NewAuthController(authService, jwtService)
 	userController    controller.UserController    = controller.NewUserController(userService, jwtService)
 	bookController    controller.BookController    = controller.NewBookController(bookService, jwtService)
+	bankController    controller.BankController    = controller.NewBankController(bankService, jwtService)
 	articleController controller.ArticleController = controller.NewArticleController(articleService, jwtService)
 	Migrations                                     = migrations.DbMigrate
 )
@@ -70,7 +73,10 @@ func main() {
 		articleRoutes.PUT("/:id", articleController.Update)
 		articleRoutes.DELETE("/:id", articleController.Delete)
 	}
-
+	bankRoutes := r.Group("api/bank", middleware.AuthorizeJWT(jwtService))
+	{
+		bankRoutes.GET("/", bankController.All)
+	}
 	go Migrations()
 
 	r.Run(":8080")
