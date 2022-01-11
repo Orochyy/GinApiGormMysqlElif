@@ -17,7 +17,6 @@ type articleConnection struct {
 	connection *gorm.DB
 }
 
-//not work
 func NewArticleRepository(dbConn *gorm.DB) ArticleRepository {
 	return &articleConnection{
 		connection: dbConn,
