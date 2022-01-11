@@ -73,7 +73,7 @@ func main() {
 		articleRoutes.PUT("/:id", articleController.Update)
 		articleRoutes.DELETE("/:id", articleController.Delete)
 	}
-	bankRoutes := r.Group("api/bank", middleware.AuthorizeJWT(jwtService))
+	bankRoutes := r.Group("api/banks", middleware.AuthorizeJWT(jwtService))
 	{
 		bankRoutes.GET("/", bankController.All)
 		bankRoutes.POST("/", bankController.Insert)
