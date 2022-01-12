@@ -63,8 +63,8 @@ func (service *bankService) FindByID(bankID uint64) entity.Bank {
 }
 
 func (service *bankService) IsAllowedToEdit(userID string, bankID uint64) bool {
-	b := service.bankRepository.FindBankByID(bankID)
-	id := fmt.Sprintf("%v", b.UserID)
+	bank := service.bankRepository.FindBankByID(bankID)
+	id := fmt.Sprintf("%v", bank.UserID)
 	return userID == id
 }
 
