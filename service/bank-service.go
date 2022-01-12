@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/mashingan/smapping"
 	"log"
+	"math"
 )
 
 type BankService interface {
@@ -16,6 +17,7 @@ type BankService interface {
 	All() []entity.Bank
 	FindByID(bankID uint64) entity.Bank
 	IsAllowedToEdit(userID string, bankID uint64) bool
+	CountCreditPercents(bankID uint64) float64
 }
 
 type bankService struct {
@@ -64,4 +66,19 @@ func (service *bankService) IsAllowedToEdit(userID string, bankID uint64) bool {
 	b := service.bankRepository.FindBankByID(bankID)
 	id := fmt.Sprintf("%v", b.UserID)
 	return userID == id
+}
+
+func (service *bankService) CountCreditPercents(bankID uint64) float64 {
+	b := service.bankRepository.FindBankByID(bankID)
+
+	loan := b.Loan
+	percent := b.Percent
+	term := b.Term
+
+	res0 := percent / 12
+	res1 := math.Pow(1+res0, term)
+	res2 := loan * res0
+	res3 := res2 * res1 / (res1 - 1)
+
+	return res3
 }

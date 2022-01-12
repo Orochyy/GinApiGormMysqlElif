@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"math"
 	"net/http"
 	"strconv"
 )
@@ -19,6 +18,7 @@ type BankController interface {
 	Insert(context *gin.Context)
 	Update(context *gin.Context)
 	Delete(context *gin.Context)
+	CountCreditPercents(context *gin.Context)
 }
 
 type bankController struct {
@@ -141,13 +141,27 @@ func (c *bankController) getUserIDByToken(token string) string {
 	return id
 }
 
-func calFormula(p float64, r float64, n float64) (m float64) {
-	var res0, res1, res2 float64
-
-	res0 = r / 12
-	res1 = math.Pow(1+res0, n)
-	res2 = p * res0
-	m = res2 * res1 / (res1 - 1)
-
-	return m
+func (c *bankController) CountCreditPercents(context *gin.Context) {
+	var bank entity.Bank
+	id, err := strconv.ParseUint(context.Param("id"), 0, 0)
+	if err != nil {
+		response := helper.BuildErrorResponse("Failed tou get id", "No param id were found", helper.EmptyObj{})
+		context.JSON(http.StatusBadRequest, response)
+	}
+	bank.ID = id
+	authHeader := context.GetHeader("Authorization")
+	token, errToken := c.jwtService.ValidateToken(authHeader)
+	if errToken != nil {
+		panic(errToken.Error())
+	}
+	claims := token.Claims.(jwt.MapClaims)
+	userID := fmt.Sprintf("%v", claims["user_id"])
+	if c.bankService.IsAllowedToEdit(userID, bank.ID) {
+		result := c.bankService.CountCreditPercents(bank.ID)
+		res := helper.BuildResponse(true, "OK", result)
+		context.JSON(http.StatusOK, res)
+	} else {
+		response := helper.BuildErrorResponse("You dont have permission", "You are not the owner", helper.EmptyObj{})
+		context.JSON(http.StatusForbidden, response)
+	}
 }

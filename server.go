@@ -80,6 +80,7 @@ func main() {
 		bankRoutes.GET("/:id", bankController.FindByID)
 		bankRoutes.PUT("/:id", bankController.Update)
 		bankRoutes.DELETE("/:id", bankController.Delete)
+		bankRoutes.POST("/:id/count", bankController.CountCreditPercents)
 	}
 	go Migrations()
 

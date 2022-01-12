@@ -50,9 +50,3 @@ func (db *bankConnection) AllBank() []entity.Bank {
 	db.connection.Preload("User").Find(&banks)
 	return banks
 }
-
-func (db *bankConnection) Count(b entity.Bank) entity.Bank {
-	db.connection.Save(&b)
-	db.connection.Preload("User").Find(&b)
-	return b
-}
