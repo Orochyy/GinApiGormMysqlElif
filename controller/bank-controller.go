@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"math"
 	"net/http"
 	"strconv"
 )
@@ -138,4 +139,15 @@ func (c *bankController) getUserIDByToken(token string) string {
 	claims := aToken.Claims.(jwt.MapClaims)
 	id := fmt.Sprintf("%v", claims["user_id"])
 	return id
+}
+
+func calFormula(p float64, r float64, n float64) (m float64) {
+	var res0, res1, res2 float64
+
+	res0 = r / 12
+	res1 = math.Pow(1+res0, n)
+	res2 = p * res0
+	m = res2 * res1 / (res1 - 1)
+
+	return m
 }
