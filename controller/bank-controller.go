@@ -143,7 +143,7 @@ func (c *bankController) getUserIDByToken(token string) string {
 
 func (c *bankController) CountCreditPercents(context *gin.Context) {
 	var bank entity.Bank
-	id, err := strconv.ParseUint(context.Param("id"), 10, 64)
+	id, err := strconv.ParseUint(context.Param("id"), 0, 0)
 	if err != nil {
 		response := helper.BuildErrorResponse("Failed tou get id", "No param id were found", helper.EmptyObj{})
 		context.JSON(http.StatusBadRequest, response)
