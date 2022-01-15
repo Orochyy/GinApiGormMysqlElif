@@ -17,7 +17,7 @@ type BankService interface {
 	All() []entity.Bank
 	FindByID(bankID uint64) entity.Bank
 	IsAllowedToEdit(userID string, bankID uint64) bool
-	CountCreditPercents(bankID uint64) float64
+	CountCreditPercents(bankID uint64) map[string]float64
 }
 
 type bankService struct {
@@ -68,7 +68,8 @@ func (service *bankService) IsAllowedToEdit(userID string, bankID uint64) bool {
 	return userID == id
 }
 
-func (service *bankService) CountCreditPercents(bankID uint64) float64 {
+func (service *bankService) CountCreditPercents(bankID uint64) map[string]float64 {
+	response := make(map[string]float64)
 	bank := service.bankRepository.FindBankByID(bankID)
 
 	loan := bank.Loan
@@ -76,6 +77,7 @@ func (service *bankService) CountCreditPercents(bankID uint64) float64 {
 	term := bank.Term
 
 	result := (loan * (percent / 12)) * math.Pow(1+(percent/12), term) / (math.Pow(1+(percent/12), term) - 1)
+	response["monthPayment"] = result
 
-	return result
+	return response
 }

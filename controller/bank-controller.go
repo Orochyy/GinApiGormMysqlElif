@@ -158,8 +158,8 @@ func (c *bankController) CountCreditPercents(context *gin.Context) {
 	userID := fmt.Sprintf("%v", claims["user_id"])
 	if c.bankService.IsAllowedToEdit(userID, bank.ID) {
 		result := c.bankService.CountCreditPercents(bank.ID)
-		res := helper.BuildResponse(true, "OK", result)
-		context.JSON(http.StatusOK, res)
+		response := helper.BuildResponse(true, "OK", result)
+		context.JSON(http.StatusOK, response)
 	} else {
 		response := helper.BuildErrorResponse("You dont have permission", "You are not the owner", helper.EmptyObj{})
 		context.JSON(http.StatusForbidden, response)
