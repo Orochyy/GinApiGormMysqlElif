@@ -68,6 +68,7 @@ func (service *bankService) IsAllowedToEdit(userID string, bankID uint64) bool {
 	return userID == id
 }
 
+//
 func (service *bankService) CountCreditPercents(bankID uint64) map[string]float64 {
 	response := make(map[string]float64)
 	bank := service.bankRepository.FindBankByID(bankID)
